@@ -371,8 +371,13 @@
   .tab-logo video{display:block;height:58%;width:auto;aspect-ratio:490/122}
   video.scr{mix-blend-mode:screen}
   /* right-hand macOS tab: mirrored, S-shoulder on the left, rounded corner on the right */
-  .brand.mac .f-right .tab{border-radius:0 28px 0 0;margin-right:0;padding:0 30px 0 22px}
-  .brand.mac .f-left .tab{margin-left:0}
+  .sub.mac .f-right .tab{border-radius:0 28px 0 0;margin-right:0;padding:0 30px 0 22px}
+  .sub.mac .f-left .tab,.sub.mac .folder:not(.f-right) .tab{margin-left:0}
+  /* single-folder pages (3D, 2D): fixed tab height so the shoulder has something to size against */
+  .sub.mac:not(.art){--tabh:66px}
+  .sub.mac:not(.art) .tab{height:var(--tabh);padding-top:0;padding-bottom:0}
+  .sub.mac:not(.art) .folder:not(.f-right) .tab::before{display:none}
+  @media (max-width:760px){.sub.mac:not(.art){--tabh:56px}}
   .mac .f-right .tab::after{display:none}
   .mac .f-right .tab::before{top:0;bottom:0;height:auto;left:calc(var(--wing) * -1);width:var(--wing);background:var(--panel);
     -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M100%200C62%200%2048%20100%200%20100H100Z%27/%3E%3C/svg%3E") 0 0/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%20preserveAspectRatio%3D%27none%27%3E%3Cpath%20d%3D%27M100%200C62%200%2048%20100%200%20100H100Z%27/%3E%3C/svg%3E") 0 0/100% 100% no-repeat}
@@ -698,7 +703,7 @@
   <div class="arrow" id="arrow" aria-hidden="true"></div>
   </div>
 
-  <section class="view sub" data-view="3d" hidden>
+  <section class="view sub mac" data-view="3d" hidden>
     <a class="back" href="#">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span data-i18n="back2">Main page</span>
@@ -722,7 +727,7 @@
     </div>
   </section>
 
-  <section class="view sub art aboutme" data-view="about" hidden>
+  <section class="view sub art mac aboutme" data-view="about" hidden>
     <a class="back" href="#">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span data-i18n="back2">Main page</span>
@@ -740,9 +745,10 @@
         <ul class="me-roles">
           <li data-i18n="role1">Motion Designer</li>
           <li class="is-new" data-i18n="role2">AI Generalist</li>
+          <li data-i18n="role4">Design Lead</li>
           <li data-i18n="role3">3D Artist</li>
         </ul>
-        <div class="me-bio"><p data-i18n="bio0">I’m a motion designer with over 5 years of experience in performance marketing and branding.</p><p data-i18n="bio1">I’ve worked with leading Ukrainian and international clients, and my projects have received multiple advertising awards.</p><p data-i18n="bio2">I can organize and guide a motion team, finding both practical and creative solutions for diverse tasks. I’m passionate about animation and creativity.</p></div>
+        <div class="me-bio"><p data-i18n="bio0">I’m a motion designer with over 6 years of experience in performance marketing, branding and leading design teams.</p><p data-i18n="bio1">I’ve worked with leading Ukrainian and international clients, and my projects have received multiple advertising awards.</p><p data-i18n="bio2">I can organize and guide a motion team, finding both practical and creative solutions for diverse tasks. I’m passionate about animation and creativity.</p></div>
         <p class="me-contacts">
           <a href="mailto:ozerianskyi.n@gmail.com">ozerianskyi.n@gmail.com</a>
           <a href="tel:+380672350563">+380 67 235 05 63</a>
@@ -753,14 +759,14 @@
     <div class="folder f-dark f-left">
       <div class="tab">
         <span class="badge badge-lead"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50.00 0.00A15.5 15.5 0 0 0 75.00 6.70A15.5 15.5 0 0 0 93.30 25.00A15.5 15.5 0 0 0 100.00 50.00A15.5 15.5 0 0 0 93.30 75.00A15.5 15.5 0 0 0 75.00 93.30A15.5 15.5 0 0 0 50.00 100.00A15.5 15.5 0 0 0 25.00 93.30A15.5 15.5 0 0 0 6.70 75.00A15.5 15.5 0 0 0 0.00 50.00A15.5 15.5 0 0 0 6.70 25.00A15.5 15.5 0 0 0 25.00 6.70A15.5 15.5 0 0 0 50.00 0.00Z"/></svg></span>
-        <h2 class="tab-title"><b class="caps" data-i18n="expT">Experience</b> <span data-i18n="expS">(5+ years)</span></h2>
+        <h2 class="tab-title"><b class="caps" data-i18n="expT">Experience</b> <span data-i18n="expS">(6+ years)</span></h2>
       </div>
       <div class="panel">
         <div class="jobs">
           <article class="job">
             <p class="job-when"><span>11.2024 —</span> <span>11.2026</span></p>
             <div class="job-who"><h3>Gorilla.UA</h3><p class="job-type" data-i18n="j1t">Gambling company</p><p class="job-role" data-i18n="j1r">Motion Designer, AI Generalist, 3D Artist</p></div>
-            <ul class="job-what"><li data-i18n="j1b0">Motion design and video editing.</li><li data-i18n="j1b1">AI-assisted creative production.</li><li data-i18n="j1b2">3D modeling and animation.</li></ul>
+            <ul class="job-what"><li data-i18n="j1b0">Motion design and video editing.</li><li data-i18n="j1bL">Led the design team.</li><li data-i18n="j1b1">AI-assisted creative production.</li><li data-i18n="j1b2">3D modeling and animation.</li></ul>
           </article>
           <article class="job">
             <p class="job-when"><span data-i18n="j2s">Freelance based</span> <span data-i18n="j2e">since 09.2021</span></p>
@@ -922,7 +928,7 @@
     </div>
   </section>
 
-  <section class="view sub" data-view="2d" hidden>
+  <section class="view sub mac" data-view="2d" hidden>
     <a class="back" href="#">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span data-i18n="back2">Main page</span>
@@ -949,7 +955,7 @@
     </div>
   </section>
 
-  <section class="view sub art" data-view="art" hidden>
+  <section class="view sub art mac" data-view="art" hidden>
     <a class="back" href="#">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span data-i18n="back2">Main page</span>
@@ -1048,8 +1054,8 @@
 <script>
 (function(){
   var dict={
-    en:{marquee:'What’s inside?',about:'About Me',brand:'Brand',art:'Art',theme:'Toggle dark theme',back2:'Main page',showreel:'Showreel',watch:'Watch the showreel on Vimeo',openVimeo:'Open on Vimeo',watchYt:'Watch on YouTube',openYt:'Open on YouTube',film:'First Session',filmKind:'(short film)',singles:'(music singles)',listen:'Listen on Spotify',showcase:'Showcase',sfT:'Svitolina Foundation',nestor:'Nestor',aiTag:'Three brands. Three AI showcases.',soundOn:'Sound on',soundOff:'Sound off',askPhone:'Do you really want to look at this not on a computer?',askYes:'Yes',foraT:'Fora',foraS:'(supermarket chain)',watch2:'Watch on Vimeo',j1e:'now',j1b0:'Motion design and video editing.',j1b1:'AI-assisted creative production.',j1b2:'3D modeling and animation.',j1t:'Gambling company',j1r:'Motion Designer, AI Generalist, 3D Artist',j2e:'since 09.2021',j2s:'Freelance based',j2b0:'Brand animation.',j2b1:'Video case production for clients and festivals.',j2t:'Creative agency',j2r:'Motion Designer',j3b0:'Produced ads for performance marketing.',j3b1:'Led a motion design team.',j3b2:'Created UI animations for apps and websites.',j3b3:'Worked on multiple IT products.',j3t:'IT company',j3r:'Motion Designer',j4b0:'Produced ads for performance marketing.',j4t:'IT product company',j4r:'Junior Motion Designer',ed0n:'Zaporizhzhia National University',ed0f:'Political science',ed1n:'University of Rostock',ed1f:'Social philosophy',ed2n:'Kyiv University',ed2f:'Political science, Philosophy',lg0n:'English',lg0l:'Advanced',lg1n:'German',lg1l:'Advanced',lg2n:'Ukrainian',lg2l:'Native',bio0:'I’m a motion designer with over 5 years of experience in performance marketing and branding.',bio1:'I’ve worked with leading Ukrainian and international clients, and my projects have received multiple advertising awards.',bio2:'I can organize and guide a motion team, finding both practical and creative solutions for diverse tasks. I’m passionate about animation and creativity.',hi:'Hi!',aboutMe:'About Me',myName:'Nestor<br>Ozerianskyi',role1:'Motion Designer',role2:'AI Generalist',role3:'3D Artist',expT:'Experience',expS:'(5+ years)',eduT:'Education',eduS:'& languages',lgT:'Languages'},
-    ua:{marquee:'Що всередині?',about:'Про мене',brand:'Бренд',art:'Арт',theme:'Перемкнути темну тему',back2:'На головну',showreel:'Шоурил',watch:'Дивитися шоурил на Vimeo',openVimeo:'Відкрити на Vimeo',watchYt:'Дивитися на YouTube',openYt:'Відкрити на YouTube',film:'Перший сеанс',filmKind:'(короткий метр)',singles:'(сингли)',listen:'Слухати на Spotify',showcase:'Шоукейс',sfT:'Фонд Еліни Світоліної',nestor:'Нестор',aiTag:'Три бренди. Три AI-шоукейси.',soundOn:'Увімкнути звук',soundOff:'Вимкнути звук',askPhone:'Ти дійсно хочеш дивитись це не з компа?',askYes:'Так',foraT:'Фора',foraS:'(мережа супермаркетів)',watch2:'Дивитися на Vimeo',j1e:'зараз',j1b0:'Моушн-дизайн і відеомонтаж.',j1b1:'Креативний продакшн з використанням AI.',j1b2:'3D-моделювання та анімація.',j1t:'Гемблінг-компанія',j1r:'Моушн-дизайнер, AI-дженераліст, 3D-артист',j2e:'з 09.2021',j2s:'Фриланс',j2b0:'Анімація брендів.',j2b1:'Продакшн відеокейсів для клієнтів і фестивалів.',j2t:'Креативна агенція',j2r:'Моушн-дизайнер',j3b0:'Створював рекламу для перформанс-маркетингу.',j3b1:'Керував командою моушн-дизайнерів.',j3b2:'Робив UI-анімації для застосунків і сайтів.',j3b3:'Працював над кількома IT-продуктами.',j3t:'IT-компанія',j3r:'Моушн-дизайнер',j4b0:'Створював рекламу для перформанс-маркетингу.',j4t:'Продуктова IT-компанія',j4r:'Молодший моушн-дизайнер',ed0n:'Запорізький національний університет',ed0f:'Політологія',ed1n:'Ростоцький університет',ed1f:'Соціальна філософія',ed2n:'Київський університет',ed2f:'Політологія, філософія',lg0n:'Англійська',lg0l:'Просунутий',lg1n:'Німецька',lg1l:'Просунутий',lg2n:'Українська',lg2l:'Рідна',bio0:'Я моушн-дизайнер з понад 5 роками досвіду в перформанс-маркетингу та брендингу.',bio1:'Я працював із провідними українськими та міжнародними клієнтами, а мої проєкти отримали низку рекламних нагород.',bio2:'Вмію організувати й скерувати моушн-команду, знаходячи практичні й водночас креативні рішення для різних задач. Я захоплююся анімацією та творчістю.',hi:'ЙО!',aboutMe:'Про мене',myName:'Нестор<br>Озерянський',role1:'Моушн-дизайнер',role2:'AI-дженераліст',role3:'3D-артист',expT:'Досвід',expS:'(5+ років)',eduT:'Освіта',eduS:'і мови',lgT:'Мови'}
+    en:{marquee:'What’s inside?',about:'About Me',brand:'Brand',art:'Art',theme:'Toggle dark theme',back2:'Main page',showreel:'Showreel',watch:'Watch the showreel on Vimeo',openVimeo:'Open on Vimeo',watchYt:'Watch on YouTube',openYt:'Open on YouTube',film:'First Session',filmKind:'(short film)',singles:'(music singles)',listen:'Listen on Spotify',showcase:'Showcase',j1bL:'Led the design team.',role4:'Design Lead',sfT:'Svitolina Foundation',nestor:'Nestor',aiTag:'Three brands. Three AI showcases.',soundOn:'Sound on',soundOff:'Sound off',askPhone:'Do you really want to look at this not on a computer?',askYes:'Yes',foraT:'Fora',foraS:'(supermarket chain)',watch2:'Watch on Vimeo',j1e:'now',j1b0:'Motion design and video editing.',j1b1:'AI-assisted creative production.',j1b2:'3D modeling and animation.',j1t:'Gambling company',j1r:'Motion Designer, AI Generalist, 3D Artist',j2e:'since 09.2021',j2s:'Freelance based',j2b0:'Brand animation.',j2b1:'Video case production for clients and festivals.',j2t:'Creative agency',j2r:'Motion Designer',j3b0:'Produced ads for performance marketing.',j3b1:'Led a motion design team.',j3b2:'Created UI animations for apps and websites.',j3b3:'Worked on multiple IT products.',j3t:'IT company',j3r:'Motion Designer',j4b0:'Produced ads for performance marketing.',j4t:'IT product company',j4r:'Junior Motion Designer',ed0n:'Zaporizhzhia National University',ed0f:'Political science',ed1n:'University of Rostock',ed1f:'Social philosophy',ed2n:'Kyiv University',ed2f:'Political science, Philosophy',lg0n:'English',lg0l:'Advanced',lg1n:'German',lg1l:'Advanced',lg2n:'Ukrainian',lg2l:'Native',bio0:'I’m a motion designer with over 6 years of experience in performance marketing, branding and leading design teams.',bio1:'I’ve worked with leading Ukrainian and international clients, and my projects have received multiple advertising awards.',bio2:'I can organize and guide a motion team, finding both practical and creative solutions for diverse tasks. I’m passionate about animation and creativity.',hi:'Hi!',aboutMe:'About Me',myName:'Nestor<br>Ozerianskyi',role1:'Motion Designer',role2:'AI Generalist',role3:'3D Artist',expT:'Experience',expS:'(6+ years)',eduT:'Education',eduS:'& languages',lgT:'Languages'},
+    ua:{marquee:'Що всередині?',about:'Про мене',brand:'Бренд',art:'Арт',theme:'Перемкнути темну тему',back2:'На головну',showreel:'Шоурил',watch:'Дивитися шоурил на Vimeo',openVimeo:'Відкрити на Vimeo',watchYt:'Дивитися на YouTube',openYt:'Відкрити на YouTube',film:'Перший сеанс',filmKind:'(короткий метр)',singles:'(сингли)',listen:'Слухати на Spotify',showcase:'Шоукейс',j1bL:'Керував дизайн-командою.',role4:'Дизайн-лід',sfT:'Фонд Еліни Світоліної',nestor:'Нестор',aiTag:'Три бренди. Три AI-шоукейси.',soundOn:'Увімкнути звук',soundOff:'Вимкнути звук',askPhone:'Ти дійсно хочеш дивитись це не з компа?',askYes:'Так',foraT:'Фора',foraS:'(мережа супермаркетів)',watch2:'Дивитися на Vimeo',j1e:'зараз',j1b0:'Моушн-дизайн і відеомонтаж.',j1b1:'Креативний продакшн з використанням AI.',j1b2:'3D-моделювання та анімація.',j1t:'Гемблінг-компанія',j1r:'Моушн-дизайнер, AI-дженераліст, 3D-артист',j2e:'з 09.2021',j2s:'Фриланс',j2b0:'Анімація брендів.',j2b1:'Продакшн відеокейсів для клієнтів і фестивалів.',j2t:'Креативна агенція',j2r:'Моушн-дизайнер',j3b0:'Створював рекламу для перформанс-маркетингу.',j3b1:'Керував командою моушн-дизайнерів.',j3b2:'Робив UI-анімації для застосунків і сайтів.',j3b3:'Працював над кількома IT-продуктами.',j3t:'IT-компанія',j3r:'Моушн-дизайнер',j4b0:'Створював рекламу для перформанс-маркетингу.',j4t:'Продуктова IT-компанія',j4r:'Молодший моушн-дизайнер',ed0n:'Запорізький національний університет',ed0f:'Політологія',ed1n:'Ростоцький університет',ed1f:'Соціальна філософія',ed2n:'Київський університет',ed2f:'Політологія, філософія',lg0n:'Англійська',lg0l:'Просунутий',lg1n:'Німецька',lg1l:'Просунутий',lg2n:'Українська',lg2l:'Рідна',bio0:'Я моушн-дизайнер з понад 6 роками досвіду в перформанс-маркетингу, брендингу та керуванні дизайн-командами.',bio1:'Я працював із провідними українськими та міжнародними клієнтами, а мої проєкти отримали низку рекламних нагород.',bio2:'Вмію організувати й скерувати моушн-команду, знаходячи практичні й водночас креативні рішення для різних задач. Я захоплююся анімацією та творчістю.',hi:'ЙО!',aboutMe:'Про мене',myName:'Нестор<br>Озерянський',role1:'Моушн-дизайнер',role2:'AI-дженераліст',role3:'3D-артист',expT:'Досвід',expS:'(6+ років)',eduT:'Освіта',eduS:'і мови',lgT:'Мови'}
   };
   var root=document.documentElement,track=document.getElementById('track');
   function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
