@@ -196,11 +196,10 @@
     .flower{top:auto;bottom:-10px;right:4px;width:96px}
     /* phone home page: only the opening, the marquee and the cards */
     .flower,.lens,.spring,.top-bloom,.view[data-view="home"] > .arrow{display:none!important}
-    .cards{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;padding:56px 14px 64px;max-width:460px}
-    .card{grid-column:span 2;width:100%;height:auto;aspect-ratio:235/410;padding:22px 8px 14px;border-radius:18px}
-    .card:nth-child(4){grid-column:2 / span 2}
+    .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:56px 24px 64px;max-width:380px}
+    .card{grid-column:auto;width:100%;height:auto;aspect-ratio:235/410;padding:22px 8px 14px;border-radius:18px}
     .card:nth-child(odd),.card:nth-child(even){margin-top:0}
-    .card:nth-child(2){margin-top:22px}
+    .card:nth-child(even){margin-top:26px}
     .card b{font-size:17px}
   }
   /* “are you sure?” popup for phones */
@@ -213,7 +212,9 @@
   .phone-ask-card button{font:900 italic 17px/1 "Montserrat",system-ui,sans-serif;border:0;cursor:pointer;background:var(--yellow);color:#111;
     border-radius:999px;padding:15px 44px}
   .phone-ask-card button:focus-visible{outline:3px solid var(--lilac);outline-offset:3px}
-  @media (min-width:761px){.phone-ask{display:none!important}
+  @media (min-width:761px){.phone-ask{display:none!important}}
+  /* a narrow window on a computer (mouse/trackpad) is not a phone */
+  @media (hover:hover) and (pointer:fine){.phone-ask{display:none!important}
   }
   /* ---------- spring with a spinning flower inside ---------- */
   .spring{position:absolute;left:0;top:-24px;width:clamp(170px,19vw,290px);z-index:1;pointer-events:none}
@@ -505,6 +506,39 @@
   }
   @media (prefers-reduced-motion:reduce){.ai-aura,.ai-word,.ai-star svg{animation:none}}
 
+
+  /* ---------- 2D + 3D page ---------- */
+  .f-light .badge b{color:#111}
+  .card b{white-space:nowrap}
+  .card[href="#3d"] b{font-size:clamp(21px,1.95vw,35px)}
+  @media (max-width:760px){.card[href="#3d"] b{font-size:15px}}
+  .art.motion .f-last .panel{padding-bottom:clamp(70px,8vw,130px)}
+  .art.motion .tab-title{font-weight:700;font-size:clamp(20px,1.8vw,28px)}
+  .motion .f-light .tile{box-shadow:0 0 0 1px rgba(17,17,17,.08),0 24px 44px -28px rgba(17,17,17,.45)}
+  .motion .f-dark .panel{padding-bottom:calc(var(--tabh) + 28px + clamp(36px,4.5vw,72px))}
+  /* Gorilla: vertical film + before/after slider, equal heights */
+  .ai-duo{--th:min(calc(100dvh - 190px),860px);display:flex;align-items:center;justify-content:space-between;gap:clamp(36px,6vw,110px);width:100%}
+  .ai-duo .ai-player.tall{flex:none;height:var(--th);width:auto;aspect-ratio:9/16;justify-self:auto}
+  /* the comparison sits on the far side, centred on the film; its caption hangs below without shifting it */
+  .ai-cmp-wrap{flex:0 1 auto;width:min(100%,calc(var(--th) * .66));align-self:center;margin-right:clamp(0px,3vw,48px);position:relative}
+  .ai-cmp-wrap .ai-note{position:absolute;left:0;right:0;top:100%}
+  .ai-compare{position:relative;width:100%;aspect-ratio:1;border-radius:clamp(14px,1.6vw,22px);overflow:hidden;background:#000;
+    box-shadow:0 0 0 1px rgba(244,243,230,.1),0 40px 80px -40px rgba(0,0,0,.9)}
+  .ai-compare video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+  .ai-compare .cmp-b{clip-path:inset(0 0 0 var(--x))}
+  .cmp-line{position:absolute;top:0;bottom:0;left:var(--x);width:2px;margin-left:-1px;background:#FEFEF2;pointer-events:none;box-shadow:0 0 12px rgba(0,0,0,.4)}
+  .cmp-knob{position:absolute;top:50%;left:50%;width:46px;height:46px;translate:-50% -50%;border-radius:50%;background:#FEFEF2;
+    box-shadow:0 6px 18px rgba(0,0,0,.45);display:grid;place-items:center}
+  .cmp-knob::before{content:"";width:22px;height:12px;background:#111;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M6 1 1 6l5 5M16 1l5 5-5 5' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 12'%3E%3Cpath d='M6 1 1 6l5 5M16 1l5 5-5 5' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+  .cmp-range{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;-webkit-appearance:none;appearance:none;touch-action:pan-y}
+  .ai-compare:focus-within .cmp-knob{outline:3px solid var(--lilac);outline-offset:3px}
+  .cmp-tag{position:absolute;top:14px;padding:6px 12px;border-radius:999px;background:rgba(17,17,17,.55);color:#FEFEF2;font-weight:800;font-size:12px;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);pointer-events:none}
+  .cmp-tag-a{left:14px}.cmp-tag-b{right:14px}
+  .ai-note{margin:12px 0 0;font-weight:700;font-size:14px;line-height:1.4;color:var(--panel-ink);opacity:.7}
+  @media (max-width:760px){.ai-duo{flex-direction:column;gap:28px}.ai-cmp-wrap{align-self:center;margin-right:0}.ai-cmp-wrap .ai-note{position:static}.ai-duo .ai-player.tall{height:auto;width:min(100%,360px)}.ai-cmp-wrap{width:min(100%,360px)}}
   /* ---------- 2D showcase: bento grid of loops ---------- */
   .panel-scroll{align-content:start;padding-top:clamp(24px,3vw,48px);padding-bottom:clamp(40px,5vw,80px)}
   .showcase{--g:clamp(10px,1.4vw,20px);container-type:inline-size;width:min(1240px,100%)}
@@ -683,19 +717,15 @@
       <b>AI</b>
     </a>
     <a class="card" href="#brand">
-      <img class="icon" src="assets/ia_2.webp" alt="" decoding="async">
+      <img class="icon" src="assets/ia_2y.webp" alt="" decoding="async">
       <b data-i18n="brand">Brand</b>
     </a>
     <a class="card" href="#3d">
       <img class="icon" src="assets/ia_1.webp" alt="" decoding="async">
-      <b>3D</b>
-    </a>
-    <a class="card" href="#2d">
-      <img class="icon" src="assets/ia_5.webp" alt="" decoding="async">
-      <b>2D</b>
+      <b>2D + 3D</b>
     </a>
     <a class="card" href="#art">
-      <img class="icon" src="assets/ia_3_1.webp" alt="" decoding="async">
+      <img class="icon" src="assets/ia_3b.webp" alt="" decoding="async">
       <b data-i18n="art">Art</b>
     </a>
   </main>
@@ -703,12 +733,13 @@
   <div class="arrow" id="arrow" aria-hidden="true"></div>
   </div>
 
-  <section class="view sub mac" data-view="3d" hidden>
+  <section class="view sub art mac motion" data-view="3d" hidden>
     <a class="back" href="#">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span data-i18n="back2">Main page</span>
     </a>
-    <div class="folder">
+
+    <div class="folder f-dark f-left">
       <div class="tab">
         <span class="badge"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50.00 0.00A15.5 15.5 0 0 0 75.00 6.70A15.5 15.5 0 0 0 93.30 25.00A15.5 15.5 0 0 0 100.00 50.00A15.5 15.5 0 0 0 93.30 75.00A15.5 15.5 0 0 0 75.00 93.30A15.5 15.5 0 0 0 50.00 100.00A15.5 15.5 0 0 0 25.00 93.30A15.5 15.5 0 0 0 6.70 75.00A15.5 15.5 0 0 0 0.00 50.00A15.5 15.5 0 0 0 6.70 25.00A15.5 15.5 0 0 0 25.00 6.70A15.5 15.5 0 0 0 50.00 0.00Z"/></svg><b>3D</b></span>
         <h1 class="tab-title" data-i18n="showreel">Showreel</h1>
@@ -723,6 +754,27 @@
           </div>
           <figcaption><a href="https://vimeo.com/1024547448" target="_blank" rel="noopener" data-i18n="openVimeo">Open on Vimeo</a></figcaption>
         </figure>
+      </div>
+    </div>
+
+    <div class="folder f-light f-right f-last">
+      <div class="tab">
+        <span class="badge"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50.00 0.00A15.5 15.5 0 0 0 75.00 6.70A15.5 15.5 0 0 0 93.30 25.00A15.5 15.5 0 0 0 100.00 50.00A15.5 15.5 0 0 0 93.30 75.00A15.5 15.5 0 0 0 75.00 93.30A15.5 15.5 0 0 0 50.00 100.00A15.5 15.5 0 0 0 25.00 93.30A15.5 15.5 0 0 0 6.70 75.00A15.5 15.5 0 0 0 0.00 50.00A15.5 15.5 0 0 0 6.70 25.00A15.5 15.5 0 0 0 25.00 6.70A15.5 15.5 0 0 0 50.00 0.00Z"/></svg><b>2D</b></span>
+        <h1 class="tab-title" data-i18n="showcase">Showcase</h1>
+      </div>
+      <div class="panel panel-scroll">
+        <div class="showcase">
+          <div class="sc-top">
+            <div class="tile t-tall" style="--a:.5625"><video src="assets/t1.mp4" autoplay muted loop playsinline></video></div>
+            <div class="sc-right">
+              <div class="sc-row"><div class="tile t-wide" style="--a:1.7778"><video src="assets/t2.mp4" autoplay muted loop playsinline></video></div><div class="tile " style="--a:1"><video src="assets/t3.mp4" autoplay muted loop playsinline></video></div></div>
+              <div class="sc-row"><div class="tile " style="--a:1"><video src="assets/t4.mp4" autoplay muted loop playsinline></video></div><div class="tile t-wide" style="--a:1.7778"><video src="assets/t5.mp4" autoplay muted loop playsinline></video></div></div>
+            </div>
+          </div>
+          <div class="sc-bottom">
+            <div class="tile t-wide t-dither" style="--a:2.3"><video src="assets/t6.mp4" autoplay muted loop playsinline></video></div><div class="tile " style="--a:1"><video src="assets/t7.mp4" autoplay muted loop playsinline></video></div><div class="tile " style="--a:1"><video src="assets/t8.mp4" autoplay muted loop playsinline></video></div><div class="tile " style="--a:1"><video src="assets/t9.mp4" autoplay muted loop playsinline></video></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -819,12 +871,25 @@
     <div class="folder f-dark f-left">
       <div class="tab"><h2 class="tab-title"><b data-i18n="nestor">Nestor</b><span class="x" aria-hidden="true">×</span><span class="sr"> x </span><b>Gorilla</b></h2></div>
       <div class="panel">
-        <div class="ai-chapter ai-vertical">
-          <div class="ai-player tall">
+        <div class="ai-chapter">
+          <div class="ai-meta ai-meta-row"><span class="ai-num">01</span><p class="ai-big">Nestor <em>×</em> Gorilla</p></div>
+          <div class="ai-duo">
+            <div class="ai-player tall">
             <video src="assets/ai_gor.mp4" autoplay muted loop playsinline aria-label="Nestor × Gorilla"></video>
             <button class="ai-sound" type="button" aria-pressed="false"><span class="ai-sound-ico" aria-hidden="true"></span><span data-i18n="soundOn">Sound on</span></button>
           </div>
-          <div class="ai-meta"><span class="ai-num">01</span><p class="ai-big">Nestor<br><em>×</em> Gorilla</p></div>
+            <div class="ai-cmp-wrap">
+              <div class="ai-compare" style="--x:50%">
+              <video class="cmp-a" src="assets/gorilla_viewport.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+              <video class="cmp-b" src="assets/gorilla_render.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+              <span class="cmp-tag cmp-tag-a" data-i18n="cmpA">3D scene</span>
+              <span class="cmp-tag cmp-tag-b" data-i18n="cmpB">Final</span>
+              <span class="cmp-line" aria-hidden="true"><span class="cmp-knob"></span></span>
+              <input class="cmp-range" type="range" min="0" max="100" value="50" step="0.1" aria-label="Compare 3D scene and final render">
+            </div>
+              <p class="ai-note" data-i18n="aiNote">I combine classic motion tools with AI.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -836,7 +901,6 @@
           <div class="ai-meta ai-meta-row"><span class="ai-num">02</span><p class="ai-big">Nestor <em>×</em> Allo</p></div>
           <div class="ai-player wide">
             <video src="assets/ai_allo.mp4" autoplay muted loop playsinline aria-label="Nestor × Allo"></video>
-            <button class="ai-sound" type="button" aria-pressed="false"><span class="ai-sound-ico" aria-hidden="true"></span><span data-i18n="soundOn">Sound on</span></button>
           </div>
         </div>
       </div>
@@ -928,34 +992,7 @@
     </div>
   </section>
 
-  <section class="view sub mac" data-view="2d" hidden>
-    <a class="back" href="#">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span data-i18n="back2">Main page</span>
-    </a>
-    <div class="folder">
-      <div class="tab">
-        <span class="badge"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50.00 0.00A15.5 15.5 0 0 0 75.00 6.70A15.5 15.5 0 0 0 93.30 25.00A15.5 15.5 0 0 0 100.00 50.00A15.5 15.5 0 0 0 93.30 75.00A15.5 15.5 0 0 0 75.00 93.30A15.5 15.5 0 0 0 50.00 100.00A15.5 15.5 0 0 0 25.00 93.30A15.5 15.5 0 0 0 6.70 75.00A15.5 15.5 0 0 0 0.00 50.00A15.5 15.5 0 0 0 6.70 25.00A15.5 15.5 0 0 0 25.00 6.70A15.5 15.5 0 0 0 50.00 0.00Z"/></svg><b>2D</b></span>
-        <h1 class="tab-title" data-i18n="showcase">Showcase</h1>
-      </div>
-      <div class="panel panel-scroll">
-        <div class="showcase">
-          <div class="sc-top">
-            <div class="tile t-tall" style="--a:.5625"><video src="assets/t1.mp4" autoplay muted loop playsinline></video></div>
-            <div class="sc-right">
-              <div class="sc-row"><div class="tile t-wide" style="--a:1.7778"><video src="assets/t2.mp4" autoplay muted loop playsinline></video></div><div class="tile " style="--a:1"><video src="assets/t3.mp4" autoplay muted loop playsinline></video></div></div>
-              <div class="sc-row"><div class="tile " style="--a:1"><video src="assets/t4.mp4" autoplay muted loop playsinline></video></div><div class="tile t-wide" style="--a:1.7778"><video src="assets/t5.mp4" autoplay muted loop playsinline></video></div></div>
-            </div>
-          </div>
-          <div class="sc-bottom">
-            <div class="tile t-wide t-dither" style="--a:2.3"><video src="assets/t6.mp4" autoplay muted loop playsinline></video></div><div class="tile " style="--a:1"><video src="assets/t7.mp4" autoplay muted loop playsinline></video></div><div class="tile " style="--a:1"><video src="assets/t8.mp4" autoplay muted loop playsinline></video></div><div class="tile " style="--a:1"><video src="assets/t9.mp4" autoplay muted loop playsinline></video></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="view sub art mac" data-view="art" hidden>
+    <section class="view sub art mac" data-view="art" hidden>
     <a class="back" href="#">
       <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span data-i18n="back2">Main page</span>
@@ -1054,8 +1091,8 @@
 <script>
 (function(){
   var dict={
-    en:{marquee:'What’s inside?',about:'About Me',brand:'Brand',art:'Art',theme:'Toggle dark theme',back2:'Main page',showreel:'Showreel',watch:'Watch the showreel on Vimeo',openVimeo:'Open on Vimeo',watchYt:'Watch on YouTube',openYt:'Open on YouTube',film:'First Session',filmKind:'(short film)',singles:'(music singles)',listen:'Listen on Spotify',showcase:'Showcase',j1bL:'Led the design team.',role4:'Design Lead',sfT:'Svitolina Foundation',nestor:'Nestor',aiTag:'Three brands. Three AI showcases.',soundOn:'Sound on',soundOff:'Sound off',askPhone:'Do you really want to look at this not on a computer?',askYes:'Yes',foraT:'Fora',foraS:'(supermarket chain)',watch2:'Watch on Vimeo',j1e:'now',j1b0:'Motion design and video editing.',j1b1:'AI-assisted creative production.',j1b2:'3D modeling and animation.',j1t:'Gambling company',j1r:'Motion Designer, AI Generalist, 3D Artist',j2e:'since 09.2021',j2s:'Freelance based',j2b0:'Brand animation.',j2b1:'Video case production for clients and festivals.',j2t:'Creative agency',j2r:'Motion Designer',j3b0:'Produced ads for performance marketing.',j3b1:'Led a motion design team.',j3b2:'Created UI animations for apps and websites.',j3b3:'Worked on multiple IT products.',j3t:'IT company',j3r:'Motion Designer',j4b0:'Produced ads for performance marketing.',j4t:'IT product company',j4r:'Junior Motion Designer',ed0n:'Zaporizhzhia National University',ed0f:'Political science',ed1n:'University of Rostock',ed1f:'Social philosophy',ed2n:'Kyiv University',ed2f:'Political science, Philosophy',lg0n:'English',lg0l:'Advanced',lg1n:'German',lg1l:'Advanced',lg2n:'Ukrainian',lg2l:'Native',bio0:'I’m a motion designer with over 6 years of experience in performance marketing, branding and leading design teams.',bio1:'I’ve worked with leading Ukrainian and international clients, and my projects have received multiple advertising awards.',bio2:'I can organize and guide a motion team, finding both practical and creative solutions for diverse tasks. I’m passionate about animation and creativity.',hi:'Hi!',aboutMe:'About Me',myName:'Nestor<br>Ozerianskyi',role1:'Motion Designer',role2:'AI Generalist',role3:'3D Artist',expT:'Experience',expS:'(6+ years)',eduT:'Education',eduS:'& languages',lgT:'Languages'},
-    ua:{marquee:'Що всередині?',about:'Про мене',brand:'Бренд',art:'Арт',theme:'Перемкнути темну тему',back2:'На головну',showreel:'Шоурил',watch:'Дивитися шоурил на Vimeo',openVimeo:'Відкрити на Vimeo',watchYt:'Дивитися на YouTube',openYt:'Відкрити на YouTube',film:'Перший сеанс',filmKind:'(короткий метр)',singles:'(сингли)',listen:'Слухати на Spotify',showcase:'Шоукейс',j1bL:'Керував дизайн-командою.',role4:'Дизайн-лід',sfT:'Фонд Еліни Світоліної',nestor:'Нестор',aiTag:'Три бренди. Три AI-шоукейси.',soundOn:'Увімкнути звук',soundOff:'Вимкнути звук',askPhone:'Ти дійсно хочеш дивитись це не з компа?',askYes:'Так',foraT:'Фора',foraS:'(мережа супермаркетів)',watch2:'Дивитися на Vimeo',j1e:'зараз',j1b0:'Моушн-дизайн і відеомонтаж.',j1b1:'Креативний продакшн з використанням AI.',j1b2:'3D-моделювання та анімація.',j1t:'Гемблінг-компанія',j1r:'Моушн-дизайнер, AI-дженераліст, 3D-артист',j2e:'з 09.2021',j2s:'Фриланс',j2b0:'Анімація брендів.',j2b1:'Продакшн відеокейсів для клієнтів і фестивалів.',j2t:'Креативна агенція',j2r:'Моушн-дизайнер',j3b0:'Створював рекламу для перформанс-маркетингу.',j3b1:'Керував командою моушн-дизайнерів.',j3b2:'Робив UI-анімації для застосунків і сайтів.',j3b3:'Працював над кількома IT-продуктами.',j3t:'IT-компанія',j3r:'Моушн-дизайнер',j4b0:'Створював рекламу для перформанс-маркетингу.',j4t:'Продуктова IT-компанія',j4r:'Молодший моушн-дизайнер',ed0n:'Запорізький національний університет',ed0f:'Політологія',ed1n:'Ростоцький університет',ed1f:'Соціальна філософія',ed2n:'Київський університет',ed2f:'Політологія, філософія',lg0n:'Англійська',lg0l:'Просунутий',lg1n:'Німецька',lg1l:'Просунутий',lg2n:'Українська',lg2l:'Рідна',bio0:'Я моушн-дизайнер з понад 6 роками досвіду в перформанс-маркетингу, брендингу та керуванні дизайн-командами.',bio1:'Я працював із провідними українськими та міжнародними клієнтами, а мої проєкти отримали низку рекламних нагород.',bio2:'Вмію організувати й скерувати моушн-команду, знаходячи практичні й водночас креативні рішення для різних задач. Я захоплююся анімацією та творчістю.',hi:'ЙО!',aboutMe:'Про мене',myName:'Нестор<br>Озерянський',role1:'Моушн-дизайнер',role2:'AI-дженераліст',role3:'3D-артист',expT:'Досвід',expS:'(6+ років)',eduT:'Освіта',eduS:'і мови',lgT:'Мови'}
+    en:{marquee:'What’s inside?',about:'About Me',brand:'Brand',art:'Art',theme:'Toggle dark theme',back2:'Main page',showreel:'Showreel',watch:'Watch the showreel on Vimeo',openVimeo:'Open on Vimeo',watchYt:'Watch on YouTube',openYt:'Open on YouTube',film:'First Session',filmKind:'(short film)',singles:'(music singles)',listen:'Listen on Spotify',showcase:'Showcase',cmpA:'3D scene',cmpB:'Final',aiNote:'I combine classic motion tools with AI.',j1bL:'Led the design team.',role4:'Design Lead',sfT:'Svitolina Foundation',nestor:'Nestor',aiTag:'Three brands. Three AI showcases.',soundOn:'Sound on',soundOff:'Sound off',askPhone:'Do you really want to look at this not on a computer?',askYes:'Yes',foraT:'Fora',foraS:'(supermarket chain)',watch2:'Watch on Vimeo',j1e:'now',j1b0:'Motion design and video editing.',j1b1:'AI-assisted creative production.',j1b2:'3D modeling and animation.',j1t:'Gambling company',j1r:'Motion Designer, AI Generalist, 3D Artist',j2e:'since 09.2021',j2s:'Freelance based',j2b0:'Brand animation.',j2b1:'Video case production for clients and festivals.',j2t:'Creative agency',j2r:'Motion Designer',j3b0:'Produced ads for performance marketing.',j3b1:'Led a motion design team.',j3b2:'Created UI animations for apps and websites.',j3b3:'Worked on multiple IT products.',j3t:'IT company',j3r:'Motion Designer',j4b0:'Produced ads for performance marketing.',j4t:'IT product company',j4r:'Junior Motion Designer',ed0n:'Zaporizhzhia National University',ed0f:'Political science',ed1n:'University of Rostock',ed1f:'Social philosophy',ed2n:'Kyiv University',ed2f:'Political science, Philosophy',lg0n:'English',lg0l:'Advanced',lg1n:'German',lg1l:'Advanced',lg2n:'Ukrainian',lg2l:'Native',bio0:'I’m a motion designer with over 6 years of experience in performance marketing, branding and leading design teams.',bio1:'I’ve worked with leading Ukrainian and international clients, and my projects have received multiple advertising awards.',bio2:'I can organize and guide a motion team, finding both practical and creative solutions for diverse tasks. I’m passionate about animation and creativity.',hi:'Hi!',aboutMe:'About Me',myName:'Nestor<br>Ozerianskyi',role1:'Motion Designer',role2:'AI Generalist',role3:'3D Artist',expT:'Experience',expS:'(6+ years)',eduT:'Education',eduS:'& languages',lgT:'Languages'},
+    ua:{marquee:'Що всередині?',about:'Про мене',brand:'Бренд',art:'Арт',theme:'Перемкнути темну тему',back2:'На головну',showreel:'Шоурил',watch:'Дивитися шоурил на Vimeo',openVimeo:'Відкрити на Vimeo',watchYt:'Дивитися на YouTube',openYt:'Відкрити на YouTube',film:'Перший сеанс',filmKind:'(короткий метр)',singles:'(сингли)',listen:'Слухати на Spotify',showcase:'Шоукейс',cmpA:'3D-сцена',cmpB:'Фінал',aiNote:'Комбіную класичні моушн-інструменти з AI.',j1bL:'Керував дизайн-командою.',role4:'Дизайн-лід',sfT:'Фонд Еліни Світоліної',nestor:'Нестор',aiTag:'Три бренди. Три AI-шоукейси.',soundOn:'Увімкнути звук',soundOff:'Вимкнути звук',askPhone:'Ти дійсно хочеш дивитись це не з компа?',askYes:'Так',foraT:'Фора',foraS:'(мережа супермаркетів)',watch2:'Дивитися на Vimeo',j1e:'зараз',j1b0:'Моушн-дизайн і відеомонтаж.',j1b1:'Креативний продакшн з використанням AI.',j1b2:'3D-моделювання та анімація.',j1t:'Гемблінг-компанія',j1r:'Моушн-дизайнер, AI-дженераліст, 3D-артист',j2e:'з 09.2021',j2s:'Фриланс',j2b0:'Анімація брендів.',j2b1:'Продакшн відеокейсів для клієнтів і фестивалів.',j2t:'Креативна агенція',j2r:'Моушн-дизайнер',j3b0:'Створював рекламу для перформанс-маркетингу.',j3b1:'Керував командою моушн-дизайнерів.',j3b2:'Робив UI-анімації для застосунків і сайтів.',j3b3:'Працював над кількома IT-продуктами.',j3t:'IT-компанія',j3r:'Моушн-дизайнер',j4b0:'Створював рекламу для перформанс-маркетингу.',j4t:'Продуктова IT-компанія',j4r:'Молодший моушн-дизайнер',ed0n:'Запорізький національний університет',ed0f:'Політологія',ed1n:'Ростоцький університет',ed1f:'Соціальна філософія',ed2n:'Київський університет',ed2f:'Політологія, філософія',lg0n:'Англійська',lg0l:'Просунутий',lg1n:'Німецька',lg1l:'Просунутий',lg2n:'Українська',lg2l:'Рідна',bio0:'Я моушн-дизайнер з понад 6 роками досвіду в перформанс-маркетингу, брендингу та керуванні дизайн-командами.',bio1:'Я працював із провідними українськими та міжнародними клієнтами, а мої проєкти отримали низку рекламних нагород.',bio2:'Вмію організувати й скерувати моушн-команду, знаходячи практичні й водночас креативні рішення для різних задач. Я захоплююся анімацією та творчістю.',hi:'ЙО!',aboutMe:'Про мене',myName:'Нестор<br>Озерянський',role1:'Моушн-дизайнер',role2:'AI-дженераліст',role3:'3D-артист',expT:'Досвід',expS:'(6+ років)',eduT:'Освіта',eduS:'і мови',lgT:'Мови'}
   };
   var root=document.documentElement,track=document.getElementById('track');
   function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
@@ -1120,6 +1157,7 @@
     var views=document.querySelectorAll('.view');
     function route(){
       var h=(location.hash||'').slice(1),hit=false;
+      if(h==='2d') h='3d';
       views.forEach(function(v){var on=v.dataset.view===h;v.hidden=!on&&v.dataset.view!=='home'?true:v.hidden;});
       views.forEach(function(v){if(v.dataset.view===h)hit=true;});
       var show=hit?h:'home';
@@ -1183,10 +1221,19 @@
   });
   function dictCur(){return dict[root.lang==='uk'?'ua':'en'];}
 
+  // Gorilla before/after: the slider moves the split; the two loops are kept in sync
+  document.querySelectorAll('.ai-compare').forEach(function(c){
+    var r=c.querySelector('.cmp-range'),a=c.querySelector('.cmp-a'),b=c.querySelector('.cmp-b');
+    function set(){c.style.setProperty('--x',r.value+'%');}
+    r.addEventListener('input',set); set();
+    function sync(){ if(a.readyState>1&&b.readyState>1&&Math.abs(a.currentTime-b.currentTime)>0.06){b.currentTime=a.currentTime;} requestAnimationFrame(sync); }
+    requestAnimationFrame(sync);
+  });
+
   // phones: ask once per visit whether they really want to browse off a computer
   (function(){
     var ask=document.getElementById('phoneAsk'),yes=document.getElementById('phoneAskYes');
-    if(!ask||!window.matchMedia('(max-width: 760px)').matches) return;
+    if(!ask||!window.matchMedia('(max-width: 760px) and (pointer: coarse)').matches) return;
     var done=false; try{done=sessionStorage.getItem('pf-phone-ok')==='1';}catch(e){}
     if(done) return;
     ask.hidden=false; setTimeout(function(){yes.focus();},50);
