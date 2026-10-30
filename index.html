@@ -236,6 +236,8 @@
   /* sub pages: no grid on the cream band (only the panel keeps one), no theme switch */
   body.is-sub::before{display:none}
   body.is-sub .theme{display:none}
+  /* the home page is always dark now, so no theme switch anywhere */
+  .controls .theme{display:none!important}
   .sub{--panel:#141413;--panel-ink:#F4F3E6;--gap:clamp(16px,3vw,40px);
     display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;padding:84px 0 0}
   .back{position:absolute;top:calc(env(safe-area-inset-top,0px) + 18px);left:var(--gap);z-index:5;
@@ -507,7 +509,12 @@
   @media (prefers-reduced-motion:reduce){.ai-aura,.ai-word,.ai-star svg{animation:none}}
 
 
+  /* ---------- home: twisted NESTOR bar (three.js, flat colours) ---------- */
+  .view[data-view="home"]{position:relative}
+  .twist{position:absolute;left:0;top:0;width:100%;height:100vh;pointer-events:none;display:block;opacity:.38}  /* bars read as soft grey, the grid shows through */
   /* ---------- 2D + 3D page ---------- */
+  /* clean home: only the Portfolio opening, the marquee and the cards (decor hidden, easy to bring back) */
+  .view[data-view="home"] .spring,.view[data-view="home"] .top-bloom,.view[data-view="home"] .flower,.view[data-view="home"] .lens{display:none!important}
   .f-light .badge b{color:#111}
   .card b{white-space:nowrap}
   .card[href="#3d"] b{font-size:clamp(21px,1.95vw,35px)}
@@ -656,6 +663,7 @@
 
 
   <div class="view" data-view="home">
+  <canvas class="twist" id="twist" aria-hidden="true"></canvas>
   <div class="spring" aria-hidden="true">
     <svg viewBox="0 0 300 330">
       <g class="coil"><path d="M-235 80A235 62 0 0 1 235 80"/><path d="M-235 160A235 62 0 0 1 235 160"/><path d="M-235 240A235 62 0 0 1 235 240"/></g>
@@ -1067,6 +1075,7 @@
   </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
   // dashed squiggle arrow, cropped to the band of the 1000×1000 comp that has the drawing
@@ -1106,8 +1115,10 @@
     document.querySelector('.theme').setAttribute('aria-label',d.theme);
     var s='';for(var i=0;i<16;i++)s+='<span>'+d.marquee+'</span>';
     track.innerHTML=s;
+    if(typeof syncMarquee==='function') syncMarquee();
     var lt=document.getElementById('lensTrack'); if(lt) lt.innerHTML=s;
     store('pf-lang',l);
+    document.dispatchEvent(new Event('pf-lang'));
   }
   document.querySelectorAll('.lang button').forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.lang);});});
   setLang(read('pf-lang')||'en');
@@ -1166,7 +1177,7 @@
       document.body.dataset.view=show;
       // sub pages always use the light look; the visitor's own theme comes back on the home page
       if(show!=='home'){ root.setAttribute('data-theme','light'); }
-      else { var saved=read('pf-theme'); if(saved) root.setAttribute('data-theme',saved); else root.removeAttribute('data-theme'); }
+      else { root.setAttribute('data-theme','dark'); }
       document.querySelectorAll('iframe[data-src]').forEach(function(f){
         var inView=f.closest('.view').dataset.view===show;
         if(inView){ if(!f.getAttribute('src')) f.src=f.dataset.src; } else if(f.getAttribute('src')){ f.removeAttribute('src'); }
@@ -1229,6 +1240,117 @@
     function sync(){ if(a.readyState>1&&b.readyState>1&&Math.abs(a.currentTime-b.currentTime)>0.06){b.currentTime=a.currentTime;} requestAnimationFrame(sync); }
     requestAnimationFrame(sync);
   });
+
+
+  // home: two endless square bars ("NESTOR", "OZERIANSKYI") lying along gentle curves, behind the content.
+  // The bars stay put; only the twist rolls along them and the words slide along the faces. Flat colours, no lighting.
+  (function(){
+    var home=document.querySelector('.view[data-view="home"]'),cv=document.getElementById('twist');
+    if(!home||!cv||!window.THREE) return;
+    var still=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var renderer=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    var scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(0,1,0,-1,-2000,2000);
+    var FILL='#141413',LINE='#F4F3EC';  // faces in the page colour, white edges and white words
+    // curves in a 2576-wide frame where the marquee centre sits at y = 948.
+    // speed = how fast the twist creeps along the bar (kept slow and opposite to the words), flow = which way the words slide
+    var BARS=[
+      {word:'NESTOR',ua:'НЕСТОР',pts:[[640,-220],[600,90],[560,300],[450,480],[260,640],[0,745],[-300,820]],turn:1.1,speed:0,z:1},
+      {word:'OZERIANSKYI',ua:'ОЗЕРЯНСЬКИЙ',pts:[[1830,-290],[1885,-70],[2030,100],[2200,245],[2330,350],[2420,490],[2445,610],[2400,695],[2265,720],[2160,655],[2140,530],[2205,400],[2320,300],[2460,230],[2620,175],[2950,100]],turn:-1.0,speed:0,z:-1,flow:1,ramp:3},
+      {word:'NESTOR',ua:'НЕСТОР',pts:[[-320,1545],[0,1556],[300,1580],[470,1620],[612,1702],[706,1842],[770,2000],[808,2165],[826,2420]],turn:1.1,speed:0,z:1}
+    ];
+    function wordOf(B){return document.documentElement.lang==='uk'&&B.ua?B.ua:B.word;}
+    function tex(word,bg,fg){
+      var c=document.createElement('canvas'),g=c.getContext('2d');
+      // letters are set one by one so the word can have extra tracking
+      var FONT='italic 900 150px Montserrat, system-ui, sans-serif',SP=22,PAD=110;
+      g.font=FONT;var chars=Array.from(word),ws=chars.map(function(ch){return g.measureText(ch).width;});
+      var tw=ws.reduce(function(a,b){return a+b;},0)+SP*(chars.length-1);
+      var w=Math.ceil(tw+PAD*2);c.width=Math.max(512,Math.min(2048,w));c.height=256;
+      g=c.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,c.width,256);g.fillStyle=fg;g.textBaseline='middle';g.font=FONT;
+      var sc=Math.min(1,(c.width-PAD*2)/tw),x=(c.width-tw*sc)/2;g.save();g.translate(x,136);g.scale(sc,1);
+      var cx=0;chars.forEach(function(ch,i){g.fillText(ch,cx,0);cx+=ws[i]+SP;});g.restore();
+      g.fillRect(0,0,c.width,9);g.fillRect(0,247,c.width,9);  // half of each edge line; the neighbouring face draws the other half
+      var t=new THREE.CanvasTexture(c);t.wrapS=THREE.RepeatWrapping;t.wrapT=THREE.ClampToEdgeWrapping;t.anisotropy=8;t.repeat.set(-1,1);  /* faces are seen from outside, so flip u to read left-to-right */t.userData={aspect:c.width/256};return t;
+    }
+    var bars=BARS.map(function(B){
+      var faces=[[FILL,LINE],[FILL,LINE],[FILL,LINE],[FILL,LINE]].map(function(f){
+        var t=tex(wordOf(B),f[0],f[1]);
+        var m=new THREE.Mesh(new THREE.BufferGeometry(),new THREE.MeshBasicMaterial({map:t,side:THREE.DoubleSide}));
+        scene.add(m);return {tex:t,mesh:m};
+      });
+      return {B:B,faces:faces,N:360};
+    });
+    var W=1,H=1,S=60,curves=[];
+    function layout(){
+      W=home.clientWidth;var mq=home.querySelector('.mq'),my=mq?mq.offsetTop+mq.offsetHeight/2:window.innerHeight*.6;
+      H=Math.max(home.offsetHeight,Math.round(my*1.6));cv.style.height=H+'px';renderer.setSize(W,H,false);
+      camera.left=0;camera.right=W;camera.top=0;camera.bottom=-H;camera.updateProjectionMatrix();
+      var hv=home.querySelector('.hero-video'),hw=hv?hv.offsetWidth:Math.min(1000,W-32);
+      S=Math.max(22,Math.min(67,hw*.0614));  // bar thickness follows the Portfolio sign, not the window
+      // The curves were drawn on a ~1830px-wide screen, where (in these reference units) the Portfolio video box spans
+      // x 583..1993, y 56..849. Every point is placed relative to that box, at the box's scale: left curves hang off its
+      // left edge, right ones off its right edge. So the bars never move toward the sign; on a narrower window the side
+      // margins shrink and the bars slide out past the page edge, and if the sign itself shrinks they shrink with it.
+      var hb=hv.getBoundingClientRect(),vb=home.getBoundingClientRect(),hl=hb.left-vb.left,hr=hb.right-vb.left,ht=hb.top-vb.top,k=hb.width/1410;
+      function mapX(x){return x<1288?hl+(x-583)*k:hr+(x-1993)*k;}
+      function mapY(y){return ht+(y-56)*k;}
+      curves=bars.map(function(b){return new THREE.CatmullRomCurve3(b.B.pts.map(function(p){return new THREE.Vector3(mapX(p[0]),-mapY(p[1]),0);}),false,'centripetal');});
+      bars.forEach(function(b,k){
+        var len=curves[k].getLength();b.len=len;
+        b.faces.forEach(function(f){
+          var g=new THREE.BufferGeometry(),n=b.N+1;
+          g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(n*2*3),3));
+          var uv=new Float32Array(n*2*2),idx=[];
+          var cell=S*f.tex.userData.aspect;
+          for(var i=0;i<n;i++){var u=(i/b.N)*len/cell;uv.set([u,0,u,1],i*4);if(i<b.N){var a=i*2;idx.push(a,a+1,a+2,a+1,a+3,a+2);}}
+          g.setAttribute('uv',new THREE.BufferAttribute(uv,2));g.setIndex(idx);
+          f.mesh.geometry.dispose();f.mesh.geometry=g;
+        });
+      });
+      shape(0);
+    }
+    var P=new THREE.Vector3(),T=new THREE.Vector3(),Nn=new THREE.Vector3(),Z=new THREE.Vector3(0,0,1);
+    function shape(t){
+      bars.forEach(function(b,k){
+        var c=curves[k],n=b.N+1,h=S/2,corner=[[1,1],[-1,1],[-1,-1],[1,-1]];
+        var arr=b.faces.map(function(f){return f.mesh.geometry.attributes.position.array;});
+        for(var i=0;i<n;i++){
+          var s=i/b.N;c.getPointAt(s,P);c.getTangentAt(s,T);Nn.crossVectors(Z,T).normalize();
+          var th=s*b.len/700*Math.PI*2*b.B.turn*.5+t*b.B.speed, co=Math.cos(th),si=Math.sin(th);
+          var zo=(b.B.z||0)*S*2+(b.B.ramp||0)*S*s;  // ramp: later parts of a looping bar ride over earlier ones  // one bar sits in front of the other, so they pass over/under instead of cutting through
+          var pts=corner.map(function(q){var a=q[0]*h,bq=q[1]*h;var nn=a*co-bq*si,zz=a*si+bq*co+zo;return [P.x+Nn.x*nn,P.y+Nn.y*nn,zz];});
+          for(var fI=0;fI<4;fI++){var A=pts[fI],Bp=pts[(fI+1)%4],o=i*6;var ar=arr[fI];
+            ar[o]=A[0];ar[o+1]=A[1];ar[o+2]=A[2];ar[o+3]=Bp[0];ar[o+4]=Bp[1];ar[o+5]=Bp[2];}
+        }
+        b.faces.forEach(function(f){f.mesh.geometry.attributes.position.needsUpdate=true;});
+      });
+    }
+    layout();window.addEventListener('resize',layout);
+    var t0=performance.now(),running=true;
+    function frame(now){
+      if(!running) return;var t=(now-t0)/1000;
+      if(!still){shape(t);bars.forEach(function(b){var dir=b.B.flow||-1;b.faces.forEach(function(f){f.tex.offset.x=dir*t*1.075/f.tex.userData.aspect;});});}
+      renderer.render(scene,camera);
+      if(!still) requestAnimationFrame(frame);
+    }
+    function refreshTex(){bars.forEach(function(b){var cols=[[FILL,LINE],[FILL,LINE],[FILL,LINE],[FILL,LINE]];b.faces.forEach(function(f,i){var n=tex(wordOf(b.B),cols[i][0],cols[i][1]);f.tex.image=n.image;f.tex.userData=n.userData;f.tex.needsUpdate=true;});});layout();if(still)renderer.render(scene,camera);}
+    if(document.fonts) document.fonts.ready.then(refreshTex);
+    document.addEventListener('pf-lang',function(){var f=document.fonts&&document.fonts.load?document.fonts.load('italic 900 150px Montserrat','НЕСТОР ОЗЕРЯНСЬКИЙ'):Promise.resolve();f.then(refreshTex,refreshTex);});
+    window.addEventListener('load',layout);
+    requestAnimationFrame(frame);
+    new MutationObserver(function(){var on=!home.hidden;if(on&&!running){running=true;layout();requestAnimationFrame(frame);}if(!on)running=false;}).observe(home,{attributes:true,attributeFilter:['hidden']});
+  })();
+
+
+  // marquee: same on-screen speed as the words on the twisted bars (.86 x bar thickness, in px per second)
+  function syncMarquee(){
+    var tr=document.getElementById('track'); if(!tr) return;
+    var hv=document.querySelector('.hero-video'),hw=hv?hv.offsetWidth:1000, S=Math.max(22,Math.min(67,hw*.0614)), v=1.075*S, d=(tr.scrollWidth/2)/v;
+    if(d>0&&isFinite(d)){ tr.style.animationDuration=d+'s'; var lt=document.getElementById('lensTrack'); if(lt) lt.style.animationDuration=d+'s'; }
+  }
+  window.addEventListener('resize',syncMarquee);
+  if(document.fonts) document.fonts.ready.then(syncMarquee);
 
   // phones: ask once per visit whether they really want to browse off a computer
   (function(){
